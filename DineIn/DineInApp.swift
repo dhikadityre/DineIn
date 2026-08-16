@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct DineInApp: App {
+    @StateObject var order = Order()
     var body: some Scene {
         WindowGroup {
             MenuScreen()
+                .environmentObject(order)
         }
     }
 }

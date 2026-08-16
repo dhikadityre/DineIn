@@ -5,10 +5,10 @@
 //  Created by DHIKA ADITYA ARE on 16/08/26.
 //
 
-import SwiftUI
+import Combine
 
-class Order {
-    var items = [MenuItem]()
+class Order: ObservableObject {
+    @Published var items = [MenuItem]()
 
     var total: Int {
         if items.count > 0 {
