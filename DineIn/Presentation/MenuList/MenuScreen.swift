@@ -18,15 +18,16 @@ struct MenuScreen: View {
                 ForEach(menu) { section in
                     Section(section.name) {
                         ForEach(section.items) { item in
-                            NavigationLink {
-                                Text(item.name)
-                            } label: {
+                            NavigationLink(value: item) {
                                 ItemMenu(item: item)
                             }
                         }
                     }
                 }
             }
+            .navigationDestination(for: MenuItem.self, destination: { item in
+                DetailMenu(item: item)
+            })
             .navigationTitle("Menu")
         }
     }
