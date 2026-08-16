@@ -19,6 +19,8 @@ struct CheckoutScreen: View {
     let tipAmountsPercentage: [Int] = [5, 10, 15, 20, 25, 30, 35]
     @State var tipAmountPercentage: Int = 5
     
+    @State private(set) var isSuccessfullConfirmOrder: Bool = false
+    
     var totalPrice: String {
         let total = Double(order.total)
         let tipValue = total / 100 * Double(tipAmountPercentage)
@@ -55,12 +57,20 @@ struct CheckoutScreen: View {
             
             Section("Total: \(totalPrice)") {
                 Button("Confirm Order") {
-                    
+                    isSuccessfullConfirmOrder.toggle()
                 }
             }
         }
         .navigationTitle("Payment")
         .navigationBarTitleDisplayMode(.inline)
+        .alert(
+            "Order Confirmed",
+            isPresented: $isSuccessfullConfirmOrder,
+        ) {
+            
+        } message: {
+            Text("Your total was \(totalPrice) - Thank you")
+        }
     }
 }
 
