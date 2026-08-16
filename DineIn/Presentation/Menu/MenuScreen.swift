@@ -18,7 +18,7 @@ struct MenuScreen: View {
                 ForEach(menu) { section in
                     Section(section.name) {
                         ForEach(section.items) { item in
-                            Text(item.name)
+                            ItemMenu(item: item)
                         }
                     }
                 }
