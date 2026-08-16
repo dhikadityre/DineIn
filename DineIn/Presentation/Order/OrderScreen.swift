@@ -19,14 +19,24 @@ struct OrderScreen: View {
                     ForEach(order.items) { menuItem in
                         renderOrderedItem(menuItem)
                     }
+                    .onDelete(perform: didDeleteItem(at:))
                 }
                 Section {
                     NavigationLink("Place Order") {
                         CheckoutScreen()
                     }
                 }
+                .disabled(order.items.isEmpty)
+            }
+            .navigationTitle("Order")
+            .toolbar {
+                EditButton()
             }
         }
+    }
+    
+    private func didDeleteItem(at offset: IndexSet) {
+        order.items.remove(atOffsets: offset)
     }
 }
 
