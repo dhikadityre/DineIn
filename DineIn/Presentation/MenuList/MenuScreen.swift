@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct MenuScreen: View {
-    let menu = Bundle.main.decode([MenuSection].self, from: "menu.json")
+    let viewModel: MenuScreenViewModel
     
     var body: some View { render() }
     
     private func render() -> some View {
         NavigationStack {
             List {
-                ForEach(menu) { section in
+                ForEach(viewModel.menu) { section in
                     Section(section.name) {
                         ForEach(section.items) { item in
                             NavigationLink(value: item) {
@@ -34,5 +34,5 @@ struct MenuScreen: View {
 }
 
 #Preview {
-    MenuScreen()
+    MenuScreen(viewModel: MenuScreenViewModel())
 }

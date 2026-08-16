@@ -23,7 +23,7 @@ struct OrderScreen: View {
                 }
                 Section {
                     NavigationLink("Place Order") {
-                        CheckoutScreen()
+                        CheckoutScreen(viewModel: CheckoutScreenViewModel())
                     }
                 }
                 .disabled(order.items.isEmpty)

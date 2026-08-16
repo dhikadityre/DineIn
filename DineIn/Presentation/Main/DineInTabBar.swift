@@ -18,7 +18,7 @@ struct DineInTabBar: View {
 extension DineInTabBar {
     private func renderTabBar() -> some View {
         TabView {
-            MenuScreen()
+            MenuScreen(viewModel: MenuScreenViewModel())
                 .tabItem{
                     Label("Menu", systemImage: "list.dash")
                 }

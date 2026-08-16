@@ -9,45 +9,29 @@ import SwiftUI
 
 struct CheckoutScreen: View {
     @EnvironmentObject var order: Order
-    
-    let paymentMethods = ["Cash", "Credit Card", "Debit", "Points"]
-    @State var paymentMethod: String = "Cash"
-    
-    @State var isUseLoyaltyCard: Bool = false
-    @State var loyaltyCardId: String = ""
-    
-    let tipAmountsPercentage: [Int] = [5, 10, 15, 20, 25, 30, 35]
-    @State var tipAmountPercentage: Int = 5
-    
-    @State private(set) var isSuccessfullConfirmOrder: Bool = false
-    
-    var totalPrice: String {
-        let total = Double(order.total)
-        let tipValue = total / 100 * Double(tipAmountPercentage)
-        return (total + tipValue).formatted(.currency(code: "USD"))
-    }
+    @State private(set) var viewModel: CheckoutScreenViewModel
     
     var body: some View { render() }
     
     private func render() -> some View {
         Form {
             Section {
-                Picker("How do you want to pay?", selection: $paymentMethod) {
-                    ForEach(paymentMethods, id: \.self) {
+                Picker("How do you want to pay?", selection: $viewModel.paymentMethod) {
+                    ForEach(viewModel.paymentMethods, id: \.self) {
                         Text($0)
                     }
                 }
-                Toggle(isOn: $isUseLoyaltyCard.animation()) {
+                Toggle(isOn: $viewModel.isUseLoyaltyCard.animation()) {
                     Text("Add loyalty card ID")
                 }
-                if isUseLoyaltyCard {
-                    TextField("Enter your loyalty card ID", text: $loyaltyCardId)
+                if viewModel.isUseLoyaltyCard {
+                    TextField("Enter your loyalty card ID", text: $viewModel.loyaltyCardId)
                 }
             }
             
             Section("Add a tip") {
-                Picker("Percentage", selection: $tipAmountPercentage) {
-                    ForEach(tipAmountsPercentage, id: \.self) {
+                Picker("Percentage", selection: $viewModel.tipAmountPercentage) {
+                    ForEach(viewModel.tipAmountsPercentage, id: \.self) {
                         Text("\($0)%")
                     }
                 }
@@ -55,9 +39,9 @@ struct CheckoutScreen: View {
             }
             
             
-            Section("Total: \(totalPrice)") {
+            Section("Total: \(viewModel.calculateTotalPrice(total: Double(order.total)))") {
                 Button("Confirm Order") {
-                    isSuccessfullConfirmOrder.toggle()
+                    viewModel.isSuccessfullConfirmOrder.toggle()
                 }
             }
         }
@@ -65,16 +49,16 @@ struct CheckoutScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .alert(
             "Order Confirmed",
-            isPresented: $isSuccessfullConfirmOrder,
+            isPresented: $viewModel.isSuccessfullConfirmOrder,
         ) {
             
         } message: {
-            Text("Your total was \(totalPrice) - Thank you")
+            Text("Your total was \(viewModel.calculateTotalPrice(total: Double(order.total))) - Thank you")
         }
     }
 }
 
 #Preview {
-    CheckoutScreen()
+    CheckoutScreen(viewModel: CheckoutScreenViewModel())
         .environmentObject(Order())
 }
