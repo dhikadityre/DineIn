@@ -9,12 +9,16 @@ import SwiftUI
 
 struct DetailMenu: View {
     let item: MenuItem
+    
+    @EnvironmentObject var order: Order
+    
     var body: some View { render() }
     
     private func render() -> some View {
         VStack {
             renderPhotoWithCredit()
             renderDescription()
+            renderButtonOrder()
             Spacer()
         }
         .navigationTitle(item.name)
@@ -45,10 +49,18 @@ extension DetailMenu {
         Text(item.description)
             .padding()
     }
+    
+    private func renderButtonOrder() -> some View {
+        Button("Order Now") {
+            order.add(item: item)
+        }
+        .buttonStyle(.borderedProminent)
+    }
 }
 
 #Preview {
     NavigationStack {
         DetailMenu(item: MenuItem.example)
+            .environmentObject(Order())
     }
 }
